@@ -133,4 +133,67 @@ table {
   border-spacing: 0;
 }
 
+html * {
+  font-family: "SF Pro Display", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+}
+
+body {
+  padding-top: 10%;
+}
+
+.tablist {
+  width: 100%;
+  margin: auto;
+  max-width: 1200px;
+  position: relative;
+  text-align: center;
+  border-bottom: 1px solid #d2d2d7;
+}
+.tablist .tablist-items {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  margin: 0px 3rem;
+  padding: 3px 3px 1px 3px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.tablist .tablist-items::-webkit-scrollbar {
+  display: none;
+}
+.tablist .tablist-items .tablist-item {
+  display: inline-block;
+  padding-left: 3rem;
+}
+.tablist .tablist-items .tablist-item:first-child {
+  padding-left: 0px;
+}
+.tablist .tablist-items .tablist-item .tablist-item-link {
+  display: block;
+  color: #6e6e73;
+  text-decoration: none;
+  line-height: 1;
+  font-weight: 400;
+  position: relative;
+  padding-bottom: 0.7rem;
+}
+.tablist .tablist-items .tablist-item .tablist-item-link:hover {
+  color: #06c;
+}
+.tablist .tablist-items .tablist-item .tablist-item-link:focus, .tablist .tablist-items .tablist-item .tablist-item-link.active {
+  color: #000;
+}
+.tablist .tablist-items .tablist-item .tablist-item-link:focus::after, .tablist .tablist-items .tablist-item .tablist-item-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  background: #000;
+  height: 1px;
+}
+.tablist .tablist-items .tablist-item .tablist-item-link:focus-visible {
+  outline: 2px solid #06c;
+}
+
 /*# sourceMappingURL=app.css.map */
