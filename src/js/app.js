@@ -6,16 +6,10 @@ const fetchNavigation = async () => {
   return navData;
 };
 
-const animatedLine = () => {
-  //get all links
+const setActiveStates = () => {
   const tabLinks = [...document.querySelectorAll(".tablist-item-link")];
-  //set first to active
   tabLinks[0].classList.add("active");
-  //apply active classes, aria
   tabLinks[0].setAttribute("aria-selected", true);
-  //position element to first active item
-
-  //on click remove/add active state
   tabLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
@@ -26,8 +20,28 @@ const animatedLine = () => {
       });
       e.currentTarget.classList.add("active");
       e.currentTarget.setAttribute("aria-selected", true);
+      updateLine(e.currentTarget);
     });
   });
+};
+
+const createLine = () => {
+  const container = document.querySelector(".tablist");
+  const lineEl = document.createElement("div");
+  lineEl.classList.add("line");
+  container.appendChild(lineEl);
+};
+
+const updateLine = (elem) => {
+  const lineEl = document.querySelector(".line");
+  console.log(elem);
+  const leftOffset = elem.offsetLeft;
+  const width = elem.offsetWidth;
+
+  lineEl.style.width = `${width}px`;
+  lineEl.style.left = `${leftOffset}px`;
+
+  console.log(lineEl.style.width, lineEl.style.left);
 };
 
 fetchNavigation().then((navData) => {
@@ -69,5 +83,11 @@ fetchNavigation().then((navData) => {
     tabListItems.appendChild(tabListItem);
   }
 
-  animatedLine();
+  setActiveStates();
+  createLine();
+});
+
+window.addEventListener("resize", () => {
+  const activeLink = document.querySelector(".tablist-item-link.active");
+  updateLine(activeLink);
 });
