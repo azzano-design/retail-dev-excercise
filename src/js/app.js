@@ -6,6 +6,30 @@ const fetchNavigation = async () => {
   return navData;
 };
 
+const animatedLine = () => {
+  //get all links
+  const tabLinks = [...document.querySelectorAll(".tablist-item-link")];
+  //set first to active
+  tabLinks[0].classList.add("active");
+  //apply active classes, aria
+  tabLinks[0].setAttribute("aria-selected", true);
+  //position element to first active item
+
+  //on click remove/add active state
+  tabLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      [...this.parentElement.parentElement.childNodes].forEach((sibling) => {
+        const link = sibling.querySelector(".tablist-item-link");
+        link.classList.remove("active");
+        link.setAttribute("aria-selected", false);
+      });
+      e.currentTarget.classList.add("active");
+      e.currentTarget.setAttribute("aria-selected", true);
+    });
+  });
+};
+
 fetchNavigation().then((navData) => {
   const { cities } = navData;
 
@@ -44,4 +68,6 @@ fetchNavigation().then((navData) => {
     //add li to container
     tabListItems.appendChild(tabListItem);
   }
+
+  animatedLine();
 });
