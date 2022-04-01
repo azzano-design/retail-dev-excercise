@@ -149,6 +149,15 @@ body {
   text-align: center;
   border-bottom: 1px solid #d2d2d7;
 }
+.tablist .line {
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 0px;
+  background: #000;
+  height: 1px;
+  transition: all 0.4s ease;
+}
 .tablist .tablist-items {
   overflow-x: auto;
   overflow-y: hidden;
@@ -182,15 +191,6 @@ body {
 }
 .tablist .tablist-items .tablist-item .tablist-item-link:focus, .tablist .tablist-items .tablist-item .tablist-item-link.active {
   color: #000;
-}
-.tablist .tablist-items .tablist-item .tablist-item-link:focus::after, .tablist .tablist-items .tablist-item .tablist-item-link.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0px;
-  width: 100%;
-  background: #000;
-  height: 1px;
 }
 .tablist .tablist-items .tablist-item .tablist-item-link:focus-visible {
   outline: 2px solid #06c;

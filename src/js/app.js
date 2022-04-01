@@ -6,6 +6,44 @@ const fetchNavigation = async () => {
   return navData;
 };
 
+const setActiveStates = () => {
+  const tabLinks = [...document.querySelectorAll(".tablist-item-link")];
+  tabLinks[0].classList.add("active");
+  tabLinks[0].setAttribute("aria-selected", true);
+  tabLinks.forEach((link) => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      [...this.parentElement.parentElement.childNodes].forEach((sibling) => {
+        const link = sibling.querySelector(".tablist-item-link");
+        link.classList.remove("active");
+        link.setAttribute("aria-selected", false);
+      });
+      e.currentTarget.classList.add("active");
+      e.currentTarget.setAttribute("aria-selected", true);
+      updateLine(e.currentTarget);
+    });
+  });
+};
+
+const createLine = () => {
+  const container = document.querySelector(".tablist");
+  const lineEl = document.createElement("div");
+  lineEl.classList.add("line");
+  container.appendChild(lineEl);
+};
+
+const updateLine = (elem) => {
+  const lineEl = document.querySelector(".line");
+  console.log(elem);
+  const leftOffset = elem.offsetLeft;
+  const width = elem.offsetWidth;
+
+  lineEl.style.width = `${width}px`;
+  lineEl.style.left = `${leftOffset}px`;
+
+  console.log(lineEl.style.width, lineEl.style.left);
+};
+
 fetchNavigation().then((navData) => {
   const { cities } = navData;
 
@@ -44,4 +82,12 @@ fetchNavigation().then((navData) => {
     //add li to container
     tabListItems.appendChild(tabListItem);
   }
+
+  setActiveStates();
+  createLine();
+});
+
+window.addEventListener("resize", () => {
+  const activeLink = document.querySelector(".tablist-item-link.active");
+  updateLine(activeLink);
 });
