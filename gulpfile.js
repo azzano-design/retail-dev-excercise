@@ -74,7 +74,12 @@ function watchTask() {
 }
 
 if (mode.production()) {
-  module.exports.default = gulp.series(cssTask, jsTask, webpackTask);
+  module.exports.default = gulp.series(
+    cssTask,
+    jsTask,
+    webpackTask,
+    browsersyncServe
+  );
 } else {
   module.exports.default = gulp.series(
     cssTask,
