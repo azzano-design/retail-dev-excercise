@@ -31,9 +31,11 @@ module.exports = /*#__PURE__*/function () {
     key: "init",
     value: function init() {
       this.createListElem(this.data);
+      this.createTabContent(this.data);
       this.createLineElem();
-      this.setActiveStates();
+      this.initActiveStates();
       this.createEventListners();
+      this.update();
     }
   }, {
     key: "update",
@@ -67,8 +69,9 @@ module.exports = /*#__PURE__*/function () {
 
         var tabListItemLink = document.createElement("a");
         tabListItemLink.classList.add("tablist-item-link");
-        tabListItemLink.href = "#".concat(section);
-        tabListItemLink.setAttribute("aria-controls", "");
+        tabListItemLink.href = "#tabcontent-".concat(section);
+        tabListItemLink.setAttribute("id", "tab-".concat(section));
+        tabListItemLink.setAttribute("aria-controls", "".concat(section));
         tabListItemLink.setAttribute("aria-selected", false);
         tabListItemLink.setAttribute("role", "tab");
         tabListItemLink.setAttribute("tabindex", "0");
@@ -77,6 +80,36 @@ module.exports = /*#__PURE__*/function () {
         tabListItem.appendChild(tabListItemLink); //add li to container
 
         tabListItems.appendChild(tabListItem);
+      }
+    }
+  }, {
+    key: "createTabContent",
+    value: function createTabContent(data) {
+      var parent = this.parentElem;
+      var tabContentContainer = document.createElement("div");
+      tabContentContainer.classList.add("tabcontent");
+      parent.appendChild(tabContentContainer);
+
+      for (var _i2 = 0, _Object$values2 = Object.values(data); _i2 < _Object$values2.length; _i2++) {
+        var _Object$values2$_i = _Object$values2[_i2],
+            section = _Object$values2$_i.section,
+            label = _Object$values2$_i.label;
+        var tabContentItem = document.createElement("div");
+        tabContentItem.classList.add("tabcontent-item");
+        tabContentItem.setAttribute("id", "tabcontent-".concat(section));
+        tabContentItem.setAttribute("aria-controledby", "tab-".concat(section));
+        tabContentItem.setAttribute("role", "tabpanel");
+        var timeClock = document.createElement("div");
+        timeClock.classList.add("timeContainer");
+        var timeClockName = document.createElement("span");
+        timeClockName.innerHTML = "Current time in ".concat(label, ": ");
+        var currentTime = document.createElement("span");
+        currentTime.classList.add("time");
+        currentTime.setAttribute("data-name", section.toLowerCase().trim().replaceAll("-", ""));
+        timeClock.appendChild(timeClockName);
+        timeClock.appendChild(currentTime);
+        tabContentItem.appendChild(timeClock);
+        tabContentContainer.appendChild(tabContentItem);
       }
     }
   }, {
@@ -99,12 +132,37 @@ module.exports = /*#__PURE__*/function () {
       lineEl.style.left = "".concat(leftOffset, "px");
     }
   }, {
-    key: "setActiveStates",
-    value: function setActiveStates() {
+    key: "initActiveStates",
+    value: function initActiveStates() {
       var tabLinks = _toConsumableArray(document.querySelectorAll(".tablist-item-link"));
 
       tabLinks[0].classList.add("active");
       tabLinks[0].setAttribute("aria-selected", true);
+      var activeTabLink = tabLinks[0].getAttribute("href");
+      var tabContent = document.querySelector("".concat(activeTabLink));
+      tabContent.classList.add("active");
+    }
+  }, {
+    key: "updateActiveStates",
+    value: function updateActiveStates(eventTarget) {
+      _toConsumableArray(eventTarget.parentElement.parentElement.childNodes).forEach(function (sibling) {
+        var link = sibling.querySelector(".tablist-item-link");
+        link.classList.remove("active");
+        link.setAttribute("aria-selected", false);
+      });
+
+      eventTarget.classList.add("active");
+      eventTarget.setAttribute("aria-selected", true);
+      var activeTabLink = eventTarget.getAttribute("href");
+      var activeTabElem = document.querySelector("".concat(activeTabLink));
+
+      var tabContentItems = _toConsumableArray(document.querySelectorAll(".tabcontent-item"));
+
+      tabContentItems.forEach(function (tabItem) {
+        tabItem.classList.remove("active");
+      });
+      activeTabElem.classList.add("active");
+      this.updateLine(eventTarget);
     }
   }, {
     key: "createEventListners",
@@ -117,16 +175,7 @@ module.exports = /*#__PURE__*/function () {
         link.addEventListener("click", function (e) {
           e.preventDefault();
 
-          _toConsumableArray(e.currentTarget.parentElement.parentElement.childNodes).forEach(function (sibling) {
-            var link = sibling.querySelector(".tablist-item-link");
-            link.classList.remove("active");
-            link.setAttribute("aria-selected", false);
-          });
-
-          e.currentTarget.classList.add("active");
-          e.currentTarget.setAttribute("aria-selected", true);
-
-          _this.updateLine(e.currentTarget);
+          _this.updateActiveStates(e.currentTarget);
         });
       });
       window.addEventListener("resize", function () {
