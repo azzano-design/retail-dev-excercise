@@ -1,5 +1,4 @@
 "use strict";
-
 module.exports = class TabList {
   constructor(elem, json, label) {
     this.parentElem = elem;
@@ -28,6 +27,7 @@ module.exports = class TabList {
     tabListItems.setAttribute("role", "tablist");
     tabListItems.setAttribute("aria-label", this.label);
     tabList.appendChild(tabListItems);
+
     //list items
     for (const { section, label } of Object.values(data)) {
       //create li

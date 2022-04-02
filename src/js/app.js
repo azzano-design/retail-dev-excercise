@@ -1,8 +1,9 @@
 "use strict";
+
 const TabList = require("./tabList");
 
 const fetchNavigation = async () => {
-  const res = await fetch("../../public/json/navigation.json");
+  const res = await fetch("../../json/navigation.json");
   return await res.json();
 };
 
